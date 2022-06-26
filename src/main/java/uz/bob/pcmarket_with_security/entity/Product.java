@@ -6,10 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import uz.bob.pcmarket_with_security.entity.template.AbsEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @EqualsAndHashCode
 @Data
@@ -17,6 +14,13 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 @Entity
 public class Product extends AbsEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(nullable = false)
+    private String name;
 
     @ManyToOne(optional = false)
     private Category category;

@@ -8,4 +8,8 @@ import uz.bob.pcmarket_with_security.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Integer> {
 
+    boolean existsByNameAndCategoryId(String name, Integer category_id);
+
+    boolean existsByNameAndCategoryIdAndIdNot(String name, Integer category_id, Integer id);
+
 }
