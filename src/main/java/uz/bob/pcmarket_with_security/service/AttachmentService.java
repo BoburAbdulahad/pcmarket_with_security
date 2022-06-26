@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import uz.bob.pcmarket_with_security.entity.Attachment;
@@ -14,6 +15,8 @@ import uz.bob.pcmarket_with_security.payload.ApiResponse;
 import uz.bob.pcmarket_with_security.repository.AttachmentContentRepository;
 import uz.bob.pcmarket_with_security.repository.AttachmentRepository;
 
+import javax.servlet.http.HttpServletResponse;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -97,4 +100,22 @@ public class AttachmentService {
         }
     }
 
+    @SneakyThrows
+    public ApiResponse getPhoto(Integer id, HttpServletResponse response) {
+        Optional<Attachment> optionalAttachment = attachmentRepository.findById(id);
+        if (optionalAttachment.isPresent()) {
+            Attachment attachment = optionalAttachment.get();
+            Optional<AttachmentContent> optionalAttachmentContent = attachmentContentRepository.findById(attachment.getId());
+            if (optionalAttachmentContent.isPresent()) {
+                AttachmentContent attachmentContent = optionalAttachmentContent.get();
+                response.setHeader("Content-Disposition","attachment;filename=\""+attachment.getName()+"\"");
+                response.setContentType(attachment.getContentType());
+                FileCopyUtils.copy(attachmentContent.getMainContent(),response.getOutputStream());
+                return new ApiResponse("=====Photo=====",true,response);
+            }
+
+            return new ApiResponse("Main content not found",false);
+        }
+        return new ApiResponse("Attachment not found",false);
+    }
 }

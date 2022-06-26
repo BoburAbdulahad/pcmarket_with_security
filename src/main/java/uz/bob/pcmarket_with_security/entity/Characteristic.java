@@ -18,7 +18,6 @@ public class Characteristic {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     private String brand;
 
     private String ram;

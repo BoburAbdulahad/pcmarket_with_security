@@ -8,11 +8,18 @@ public interface CustomCharacteristic {
 
     Integer getId();
 
-    String getSize();
+    String getBrand();
 
-    String getColor();
+    String getRam();
 
-    Double getWeight();
+    String getCpu();
 
+    String getScreen();
+
+    String getSsd();
+
+    String getVc();
+
+    String getHdd();
 
 }

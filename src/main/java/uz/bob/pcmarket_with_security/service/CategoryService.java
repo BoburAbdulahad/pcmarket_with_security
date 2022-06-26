@@ -52,16 +52,20 @@ public class CategoryService {
         if (!optionalCategory.isPresent()) {
             return new ApiResponse("Category not found",false);
         }
+        boolean b = categoryRepository.existsByNameAndParentCategoryIdAndIdNot(categoryDto.getName(), categoryDto.getParentCategoryId(), id);
+        if (b)
+            return new ApiResponse("This category and parentId already exist at the other id",false);
         Category editingCategory = optionalCategory.get();
         if (categoryDto.getParentCategoryId()!=null) {
-            if (!categoryRepository.existsById(categoryDto.getParentCategoryId())) {
+            Optional<Category> optionalParentCategory = categoryRepository.findById(categoryDto.getParentCategoryId());
+            if (!optionalParentCategory.isPresent()) {
                 return new ApiResponse("Parent category not found",false);
             }
-            editingCategory.setParentCategory(categoryRepository.getReferenceById(categoryDto.getParentCategoryId()));
+            editingCategory.setParentCategory(optionalParentCategory.get());
         }
         editingCategory.setName(categoryDto.getName());
-        categoryRepository.save(editingCategory);
-        return new ApiResponse("Category edited",true);
+        Category savedCategory = categoryRepository.save(editingCategory);
+        return new ApiResponse("Category edited",true,savedCategory);
     }
 
     public boolean deleted(Integer id){

@@ -12,7 +12,7 @@ import uz.bob.pcmarket_with_security.service.CategoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/api/category")
 public class CategoryController {
 
     @Autowired
@@ -48,7 +48,7 @@ public class CategoryController {
         boolean deleted = categoryService.deleted(id);
         if (deleted)
             return ResponseEntity.noContent().build();
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.notFound().build();
     }
 
 

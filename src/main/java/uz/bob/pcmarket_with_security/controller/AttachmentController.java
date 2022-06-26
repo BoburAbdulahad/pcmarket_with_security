@@ -10,17 +10,18 @@ import uz.bob.pcmarket_with_security.entity.Attachment;
 import uz.bob.pcmarket_with_security.payload.ApiResponse;
 import uz.bob.pcmarket_with_security.service.AttachmentService;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/attachment")
+@RequestMapping("/api/attachment")
 public class AttachmentController {
 
     @Autowired
     AttachmentService attachmentService;
 
     @GetMapping
-    public HttpEntity<List<Attachment>> getAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "3") int size) {
+    public HttpEntity<List<Attachment>> getAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size) {
         List<Attachment> all = attachmentService.getAll(page, size);
         return new HttpEntity<>(all);
     }
@@ -32,6 +33,15 @@ public class AttachmentController {
             return ResponseEntity.notFound().build();
         return ResponseEntity.status(200).body(attachment);
 
+    }
+
+    //download Attachment with content
+    @GetMapping("/download/{id}")
+    public HttpEntity<ApiResponse> getPhotoById(@PathVariable Integer id, HttpServletResponse response){
+        ApiResponse photo = attachmentService.getPhoto(id, response);
+        if (photo.isSuccess())
+            return ResponseEntity.status(200).body(photo);
+        return ResponseEntity.status(409).body(photo);
     }
 
     @PostMapping
