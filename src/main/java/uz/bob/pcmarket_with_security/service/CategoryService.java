@@ -48,6 +48,28 @@ public class CategoryService {
     }
 
     public ApiResponse edit(Integer id,CategoryDto categoryDto){
-        
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (!optionalCategory.isPresent()) {
+            return new ApiResponse("Category not found",false);
+        }
+        Category editingCategory = optionalCategory.get();
+        if (categoryDto.getParentCategoryId()!=null) {
+            if (!categoryRepository.existsById(categoryDto.getParentCategoryId())) {
+                return new ApiResponse("Parent category not found",false);
+            }
+            editingCategory.setParentCategory(categoryRepository.getReferenceById(categoryDto.getParentCategoryId()));
+        }
+        editingCategory.setName(categoryDto.getName());
+        categoryRepository.save(editingCategory);
+        return new ApiResponse("Category edited",true);
+    }
+
+    public boolean deleted(Integer id){
+        try {
+            categoryRepository.deleteById(id);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }
