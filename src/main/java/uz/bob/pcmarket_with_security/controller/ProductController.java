@@ -22,7 +22,7 @@ public class ProductController {
 
     //ADMIN
 //    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @PreAuthorize("hasAuthority('READ_ALL')")
+//    @PreAuthorize("hasAuthority('READ_ALL')")
     @GetMapping
     public HttpEntity<List<Product>> getAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
         return new HttpEntity<>(productService.getProducts(page, size));
@@ -30,7 +30,7 @@ public class ProductController {
 
     //ADMIN,OPERATOR
 //    @PreAuthorize("hasAnyRole('SUPER_ADMIN','OPERATOR')")
-    @PreAuthorize("hasAuthority('READ_ONE')")
+//    @PreAuthorize("hasAuthority('READ_ONE')")
     @GetMapping("/{id}")
     public HttpEntity<Product> getProduct(@PathVariable Integer id){
         Product product = productService.getProduct(id);
@@ -39,7 +39,7 @@ public class ProductController {
 
     //ADMIN,MODERATOR
 //    @PreAuthorize("hasAnyRole('SUPER_ADMIN','MODERATOR')")
-    @PreAuthorize("hasAuthority('ADD')")
+//    @PreAuthorize("hasAuthority('ADD')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody ProductDto productDto){
         ApiResponse apiResponse = productService.add(productDto);
@@ -48,7 +48,7 @@ public class ProductController {
 
     //ADMIN,MODERATOR
 //    @PreAuthorize("hasAnyRole('SUPER_ADMIN','MODERATOR')")
-    @PreAuthorize("hasAuthority('EDIT')")
+//    @PreAuthorize("hasAuthority('EDIT')")
     @PutMapping("/{num}")
     public HttpEntity<?> edit(@PathVariable(value = "num") Integer id,@RequestBody ProductDto productDto){
         ApiResponse apiResponse = productService.edit(id, productDto);
@@ -57,7 +57,7 @@ public class ProductController {
 
     //ADMIN
 //    @PreAuthorize("hasRole('SUPER_ADMIN')")
-    @PreAuthorize("hasAuthority('DELETE')")
+//    @PreAuthorize("hasAuthority('DELETE')")
     @DeleteMapping("/{number}")
     public HttpEntity<?> delete(@PathVariable(name = "number") Integer id){
         boolean b = productService.delete(id);

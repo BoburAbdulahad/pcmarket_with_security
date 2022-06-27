@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -33,10 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-//                .antMatchers(HttpMethod.GET,"/api/product/{*}").hasAuthority("READ_ONE")
-//                .antMatchers(HttpMethod.POST,"/api/product").hasAuthority("ADD")
-//                .antMatchers(HttpMethod.PUT,"/api/product/*").hasAuthority("EDIT")
-//                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL","READ_ONE","ADD","EDIT","DELETE")
+                .antMatchers(HttpMethod.GET,"/api/product/{*}").hasAuthority("READ_ONE")
+                .antMatchers(HttpMethod.POST,"/api/product").hasAuthority("ADD")
+                .antMatchers(HttpMethod.PUT,"/api/product/*").hasAuthority("EDIT")
+                .antMatchers(HttpMethod.GET,"/api/product/**").hasAuthority("READ_ALL")
+                .antMatchers(HttpMethod.DELETE,"/api/product/*").hasAuthority("DELETE")
                 .anyRequest()
                 .authenticated()
                 .and()
