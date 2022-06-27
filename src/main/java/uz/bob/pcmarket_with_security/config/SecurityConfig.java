@@ -21,11 +21,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         auth
                 .inMemoryAuthentication()
-                .withUser("admin").password(passwordEncoder().encode("1111")).roles("SUPER_ADMIN")
+                .withUser("admin").password(passwordEncoder().encode("1111")).roles("SUPER_ADMIN").authorities("READ_ALL","READ_ONE","ADD","EDIT","DELETE")
                 .and()
-                .withUser("moderator").password(passwordEncoder().encode("2222")).roles("MODERATOR")
+                .withUser("moderator").password(passwordEncoder().encode("2222")).roles("MODERATOR").authorities("ADD","EDIT")
                 .and()
-                .withUser("operator").password(passwordEncoder().encode("3333")).roles("OPERATOR");
+                .withUser("operator").password(passwordEncoder().encode("3333")).roles("OPERATOR").authorities("READ_ONE");
     }
 
     @Override
@@ -33,10 +33,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-//                .antMatchers(HttpMethod.GET,"/api/product/{*}").hasAnyRole("SUPER_ADMIN","OPERATOR")
-//                .antMatchers(HttpMethod.POST,"/api/product").hasAnyRole("SUPER_ADMIN","MODERATOR")
-//                .antMatchers(HttpMethod.PUT,"/api/product/*").hasAnyRole("SUPER_ADMIN","MODERATOR")
-//                .antMatchers("/api/product/**").hasRole("SUPER_ADMIN")
+//                .antMatchers(HttpMethod.GET,"/api/product/{*}").hasAuthority("READ_ONE")
+//                .antMatchers(HttpMethod.POST,"/api/product").hasAuthority("ADD")
+//                .antMatchers(HttpMethod.PUT,"/api/product/*").hasAuthority("EDIT")
+//                .antMatchers("/api/product/**").hasAnyAuthority("READ_ALL","READ_ONE","ADD","EDIT","DELETE")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -49,3 +49,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 }
+
+//                .antMatchers(HttpMethod.GET,"/api/product/{*}").hasAnyRole("SUPER_ADMIN","OPERATOR")
+//                .antMatchers(HttpMethod.POST,"/api/product").hasAnyRole("SUPER_ADMIN","MODERATOR")
+//                .antMatchers(HttpMethod.PUT,"/api/product/*").hasAnyRole("SUPER_ADMIN","MODERATOR")
+//                .antMatchers("/api/product/**").hasRole("SUPER_ADMIN")
