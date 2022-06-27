@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import uz.bob.pcmarket_with_security.entity.Product;
 import uz.bob.pcmarket_with_security.payload.ApiResponse;
@@ -20,12 +21,14 @@ public class ProductController {
     ProductService productService;
 
     //ADMIN
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @GetMapping
     public HttpEntity<List<Product>> getAll(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int size){
         return new HttpEntity<>(productService.getProducts(page, size));
     }
 
     //ADMIN,OPERATOR
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','OPERATOR')")
     @GetMapping("/{id}")
     public HttpEntity<Product> getProduct(@PathVariable Integer id){
         Product product = productService.getProduct(id);
@@ -33,6 +36,7 @@ public class ProductController {
     }
 
     //ADMIN,MODERATOR
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','MODERATOR')")
     @PostMapping
     public ResponseEntity<?> add(@RequestBody ProductDto productDto){
         ApiResponse apiResponse = productService.add(productDto);
@@ -40,6 +44,7 @@ public class ProductController {
     }
 
     //ADMIN,MODERATOR
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','MODERATOR')")
     @PutMapping("/{num}")
     public HttpEntity<?> edit(@PathVariable(value = "num") Integer id,@RequestBody ProductDto productDto){
         ApiResponse apiResponse = productService.edit(id, productDto);
@@ -47,6 +52,7 @@ public class ProductController {
     }
 
     //ADMIN
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     @DeleteMapping("/{number}")
     public HttpEntity<?> delete(@PathVariable(name = "number") Integer id){
         boolean b = productService.delete(id);
