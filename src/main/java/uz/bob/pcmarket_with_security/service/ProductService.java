@@ -73,18 +73,19 @@ public class ProductService {
     }
 
     public ApiResponse edit(Integer id,ProductDto productDto){
-        boolean b = productRepository.existsByNameAndCategoryIdAndIdNot(productDto.getName(), productDto.getCategoryId(), id);
-        if (b)
-            return new ApiResponse("Its product name and this category already exist in other id",false);
         Optional<Product> optionalProduct = productRepository.findById(id);
         if (!optionalProduct.isPresent()) {
             return new ApiResponse("Product not found",false);
         }
+        boolean b = productRepository.existsByNameAndCategoryIdAndIdNot(productDto.getName(), productDto.getCategoryId(), id);
+        if (b) {
+            return new ApiResponse("Its product name and this category already exist in other id",false);
+        }
         Product product = optionalProduct.get();
         product.setName(productDto.getName());
-        product.setCategory(categoryRepository.getOne(productDto.getCategoryId()));
-        product.setPhoto(attachmentRepository.getOne(productDto.getPhotoId()));
-        product.setCharacteristic(characteristicRepository.getOne(productDto.getCharacteristicId()));
+        product.setCategory(categoryRepository.findById(productDto.getCategoryId()).orElse(null));
+        product.setPhoto(attachmentRepository.findById(productDto.getPhotoId()).orElse(null));
+        product.setCharacteristic(characteristicRepository.findById(productDto.getCharacteristicId()).orElse(null));
         product.setPrice(productDto.getPrice());
 
         Product savedProduct = productRepository.save(product);

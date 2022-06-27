@@ -11,8 +11,8 @@
     <groupId>uz.bob</groupId>
     <artifactId>pcmarket_with_security</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>pcmarket_with_security</name>
-    <description>pcmarket_with_security</description>
+    <name>pcMarket_with_security</name>
+    <description>pcMarket_with_security</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
@@ -56,7 +56,7 @@
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-rest</artifactId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
     </dependencies>
 

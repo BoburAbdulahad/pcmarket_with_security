@@ -92,8 +92,8 @@ public class AttachmentService {
     public boolean delete(Integer id){
         try {
             Attachment attachment = attachmentRepository.getReferenceById(id);
-            attachmentRepository.deleteById(id);
             attachmentContentRepository.deleteById(attachment.getId());
+            attachmentRepository.deleteById(id);
             return true;
         }catch (Exception e){
             return false;
